@@ -1,0 +1,6 @@
+[Unit]
+Description=Run Once service to install Chef-client and then configure the connection to Chef-Master.solsys.com
+
+[Service]
+
+[Install]
