@@ -1,5 +1,13 @@
 #!/bin/bash
-
+### BEGIN INIT INFO
+# Provides: chef_install
+# Required-Start: $local_fs $network $remote_fs
+# Required-Stop: $local_fs $network $remote_fs
+# Default-Start:  2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: start and stop service my-service
+# Description: This will start a chef install and then auto delete
+### END INIT INFO
 # Do some chef pre-work
 /bin/mkdir -p /etc/chef
 /bin/mkdir -p /var/lib/chef
@@ -47,7 +55,7 @@ IHBUVPNco0ziX2hWtCBFER2rtYtaMaOv4NiALyYpT/8PQsXNCF/ze+cEZwiSjg==
 cat > "/etc/chef/first-boot.json" << EOF
 {
    "run_list" :[
-   "role[base_configuration]"
+   "role[base]"
    ]
 }
 EOF
@@ -61,4 +69,6 @@ NODE_NAME=node-$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 4 | head -n 1)
 /bin/echo -e "validation_key \"/etc/chef/bootstrap.pem\"" >> /etc/chef/client.rb
 /bin/echo -e "node_name  \"${NODE_NAME}\"" >> /etc/chef/client.rb
 
-sudo chef-client -j /etc/chef/first-boot.json
+chef-client -j /etc/chef/first-boot.json
+
+rm /etc/init.d/chef_install
